@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="./attachs/bootstrap.css">
+    <link rel="shortcut icon" href="./attachs/favicon.ico" type="image/x-icon" />
+    <title>Hello, SSRF!</title>
+  </head>
+  <body>
+  <?php
+  function get_contents($url) {
+      $disallowed_cidrs = [ "127.0.0.1/24", "169.254.0.0/16", "0.0.0.0/8" ];
+      $url_parts = parse_url($url);
+
+      if (!array_key_exists("host", $url_parts)) { die("<p><h3 style=color:red>There was no host in your url!</h3></p>"); }
+      echo '<table width="40%" cellspacing="0" cellpadding="0" class="tb1" style="opacity: 0.6;"> 
+			  <tr><td align=center style="padding: 10px;" >Domain: - '.$host = $url_parts["host"].'';
+
+      if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+          $ip = $host;
+      } else {
+          $ip = dns_get_record($host, DNS_A);
+          if (count($ip) > 0) {
+              $ip = $ip[0]["ip"];
+              echo "<br>Resolved to IP: - {$ip}<br>";
+
+          } else {
+              die("<br>Your host couldn't be resolved man...</h3></p>");
+          }
+      }
+
+      foreach ($disallowed_cidrs as $cidr) {
+          if (in_cidr($cidr, $ip)) {
+              die("<br>That IP is a blacklisted cidr ({$cidr})!</h3></p>"); // Stop processing if domain reolved to private/reserved IP
+          }
+      }
+
+
+      echo "<br>Domain IP is not private, Here goes the data fetched from remote URL<br> </td></tr></table>";
+      echo "<br><textarea rows=10 cols=130  >".file_get_contents($url)."</textarea>";
+
+  }
+
+  function in_cidr($cidr, $ip) {
+      list($prefix, $mask) = explode("/", $cidr);
+
+      return 0 === (((ip2long($ip) ^ ip2long($prefix)) >> $mask) << $mask);
+  }
+  ?>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">模拟蜘蛛爬取</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor03">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">首页
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="https://www.ctfstu.com">重庆橙子科技
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    </nav>
+    <div class="container">
+      <div class="jumbotron">
+          <h2 class="text-center">文件获取显示</2>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <form method="POST">
+            <div class="form-group">
+              <input class="form-control form-control-lg" type="text" placeholder="请输入要查询的网站" name="file">
+            </div>
+              <button type="submit" class="btn btn-primary" style="display:block;margin:0 auto">Submit</button>
+          </form>
+        </div>
+      </div>
+
+      <hr class="my-4">
+      <?php
+      if(isset($_POST['load']))
+      {
+
+          echo '
+   <table width="40%" cellspacing="0" cellpadding="0" class="tb1" style="opacity: 0.6;">
+   <tr><td align=center style="padding: 10px;" >
+	<form method=post action="'.$_SERVER['SCRIPT_NAME'].'">Specify the Remote file URL: <input type=text style="width:250px;" name=file value=http://remote_server/file.txt><br><br><input type=submit name=read value="load file"></form>
+
+   </td></tr></table>
+   <table width="50%" cellspacing="0" cellpadding="0" class="tb1" style="margin:10px 2px 10px;opacity: 0.6;" >';
+
+      }
+
+      $file=strtolower($_POST['file']);
+
+      if(strstr($file, 'localhost') == false && preg_match('/(^https*:\/\/[^:\/]+)/', $file)==true)
+      {
+
+          get_contents($file);
+
+      }
+      elseif(strstr(strtolower($file), 'localhost') == true && preg_match('/(^https*:\/\/[^:\/]+)/', $file)==true)
+      {
+          echo '
+		<table width="30%" cellspacing="0" cellpadding="0" class="tb1" style="opacity: 0.6;">
+						   <tr><td align=center style="padding: 10px;" >
+							Dear Nigga, Trying to access Localhost o_0 ? 
+
+						   </td></tr></table>
+						   <table width="50%" cellspacing="0" cellpadding="0" class="tb1" style="margin:10px 2px 10px;opacity: 0.6;" >';
+      }
+
+      ?>
+    </div>
+    <script src="./attachs/jquery.min.js"></script>
+    <script src="./attachs/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
+
