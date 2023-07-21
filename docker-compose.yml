@@ -39,15 +39,6 @@ services:
       lan:
         ipv4_address: 172.250.250.2
 
-        
- ssrfvul:
-    build: ./SSRF_Vulnerable_Lab
-    restart: always
-    networks:
-      extnetwork:
-        ipv4_address: 172.251.251.3
-        
- 
  CodeExec:
     image: php:7.0.8-apache
     volumes:
@@ -125,8 +116,6 @@ services:
     - ./Fastcgi/default.conf:/etc/nginx/conf.d/default.conf
    depends_on:
     - php
-   ports:
-    - "80"
    restart: always  
    networks:
      lan:
@@ -135,10 +124,19 @@ services:
  php:
    image: php:7.2.10-fpm
    volumes:
-    - ./Fastcgi/www:/var/www/html  
-   ports:
-   - "80"
+    - ./Fastcgi/www:/var/www/html
    restart: always  
    networks:
      lan:
        ipv4_address: 172.250.250.13
+
+ mysql_ssrf:
+   image: php:7.2.10-apache
+   volumes:
+     - ./mysql_ssrf/www:/var/www/html
+   restart: always
+   networks:
+     extnetwork:
+       ipv4_address: 172.251.251.3
+     lan:
+       ipv4_address: 172.250.250.3
