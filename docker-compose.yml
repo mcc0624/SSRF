@@ -133,7 +133,7 @@ services:
  mysql_ssrf:
    image: php:7.2.10-apache
    volumes:
-     - ./mysql_ssrf/www:/var/www/html
+     - ./mysql_ssrf:/var/www/html
    restart: always
    networks:
      extnetwork:
