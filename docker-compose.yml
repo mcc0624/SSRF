@@ -116,6 +116,12 @@ services:
      lan:
        ipv4_address: 172.250.250.12
  
+ upload:
+   image: c0ny1/upload-labs
+   restart: always
+   networks:
+     lan:
+       ipv4_address: 172.250.250.13
 
  mysql_ssrf:
    image: php:7.2.10-apache
