@@ -141,4 +141,4 @@ services:
    restart: always
    networks:
      lan:
-       ipv4_address: 172.250.250.13
+       ipv4_address: 172.250.250.15
