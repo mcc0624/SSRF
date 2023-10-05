@@ -133,3 +133,11 @@ services:
        ipv4_address: 172.251.251.3
      lan:
        ipv4_address: 172.250.250.3
+       
+ typeecho:
+   image: php:7.2.10-apache
+   volumes:
+     - ./TypeEcho:/var/www/html
+   restart: always
+     lan:
+       ipv4_address: 172.250.250.13

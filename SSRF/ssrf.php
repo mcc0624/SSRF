@@ -60,7 +60,8 @@
         if($url){
           echo "<b>".$url." 的快照如下：</b><br><br>";
           echo "<pre>";
-          curl($url);
+	  curl($url);
+	  include($url);
           echo "</pre>";
         }
       ?>
