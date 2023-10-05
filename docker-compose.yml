@@ -139,5 +139,6 @@ services:
    volumes:
      - ./TypeEcho:/var/www/html
    restart: always
+   networks:
      lan:
        ipv4_address: 172.250.250.13
