@@ -95,7 +95,7 @@ services:
       lan:
         ipv4_address: 172.250.250.9
     ports:
-      - "9091:8080"
+      - "2222:22"
  
  redisauth:
     build: ./Redisauth
