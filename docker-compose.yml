@@ -144,3 +144,12 @@ services:
    networks:
      lan:
        ipv4_address: 172.250.250.15
+
+ fast_ssrf:
+   image: php:7.4.9-apache
+   volumes:
+     - ./Fastcgi/www:/var/www/html
+   restart: always
+   networks:
+     lan:
+       ipv4_address: 172.250.250.16
