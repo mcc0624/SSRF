@@ -151,5 +151,7 @@ services:
      - ./Fastcgi/www:/var/www/html
    restart: always
    networks:
+     extnetwork:
+       ipv4_address: 172.251.251.4
      lan:
        ipv4_address: 172.250.250.16
