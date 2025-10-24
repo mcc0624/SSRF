@@ -17,16 +17,17 @@ networks:
         
 services:
  apache:
-    image: bitnami/apache:2.4.54
+    image: httpd:2.4
     restart: always
     networks:
       extnetwork:
         ipv4_address: 172.251.251.251
     ports:
-      - "9091:8080"
+      - "9091:80"
     volumes:
-      - ./apache/index.html:/opt/bitnami/apache2/htdocs/index.html
-      - ./apache/my_vhost.conf:/vhosts/my_vhost.conf
+      - ./apache/index.html:/usr/local/apache2/htdocs/index.html
+      - ./apache/my_vhost.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
+      - ./apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
       
  SSRF:
     image: php:7.0.8-apache
